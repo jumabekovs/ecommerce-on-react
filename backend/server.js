@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const data = require("./data.js");
+const productRouter = require("./routers/productRouter.js");
 const userRouter = require("./routers/userRouter.js");
 
 const app = express();
@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/amazona", {
   useCreateIndex: true,
 });
 
-app.get("/api/products/:id", (req, res) => {
+/*app.get("/api/products/:id", (req, res) => {
   const product = data.products.find((x) => x._id === req.params.id);
   if (product) {
     res.send(product);
@@ -23,9 +23,10 @@ app.get("/api/products/:id", (req, res) => {
 
 app.get("/api/products", (req, res) => {
   res.send(data);
-});
+});   we used it before mongoDB  */
 
 app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is ready");

@@ -8,7 +8,7 @@ const userRouter = express.Router();
 userRouter.get(
   "/seed",
   expressAsyncHandler(async (res, req) => {
-    // await User.remove({});
+    // await User.remove({}); /* to remove duplicates */
     const createdUsers = await User.insertMany(data.users);
     res.send({ createdUsers });
   })

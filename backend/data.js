@@ -17,7 +17,6 @@ const data = {
   ],
   products: [
     {
-      _id: "1",
       name: "Polo Slim Shirt",
       category: "Shirts",
       image: "/images/p1.jpg",
@@ -29,7 +28,6 @@ const data = {
       description: "high quality product",
     },
     {
-      _id: "2",
       name: "Mavi Shirt",
       category: "Shirts",
       image: "/images/p2.jpg",
@@ -41,7 +39,6 @@ const data = {
       description: "brand new product",
     },
     {
-      _id: "3",
       name: "Lacoste Shirt",
       category: "Shirts",
       image: "/images/p3.jpg",
@@ -53,7 +50,6 @@ const data = {
       description: "new collection product",
     },
     {
-      _id: "4",
       name: "Polo Pants",
       category: "Pants",
       image: "/images/p4.jpg",
@@ -65,7 +61,6 @@ const data = {
       description: "fit pantalons",
     },
     {
-      _id: "5",
       name: "Denim Pants",
       category: "Pants",
       image: "/images/p5.jpg",
@@ -77,7 +72,6 @@ const data = {
       description: "nylon pants",
     },
     {
-      _id: "6 ",
       name: "D&G Pants",
       category: "Pants",
       image: "/images/p6.jpg",

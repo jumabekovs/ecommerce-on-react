@@ -1,4 +1,8 @@
-import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "../constants/cartConstants";
+import {
+  CART_ADD_ITEM,
+  CART_REMOVE_ITEM,
+  CART_SAVE_SHIPPING_ADDRESS,
+} from "../constants/cartConstants";
 import { USER_SIGNOUT } from "../constants/userConstants";
 
 const initialState = {
@@ -26,6 +30,8 @@ export const cartReducer = (state = initialState, action) => {
         ...state,
         cartItems: state.cartItems.filter((x) => x.product !== action.payload), // finding right element to remove it
       };
+    case CART_SAVE_SHIPPING_ADDRESS:
+      return { ...state, shippingAddress: action.payload }; // from action
     case USER_SIGNOUT:
       return initialState;
     default:

@@ -1,6 +1,11 @@
 import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "../constants/cartConstants";
+import { USER_SIGNOUT } from "../constants/userConstants";
 
-export const cartReducer = (state = { cartItems: [] }, action) => {
+const initialState = {
+  cartItems: [],
+};
+
+export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case CART_ADD_ITEM: {
       const item = action.payload;
@@ -21,6 +26,8 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
         ...state,
         cartItems: state.cartItems.filter((x) => x.product !== action.payload), // finding right element to remove it
       };
+    case USER_SIGNOUT:
+      return initialState;
     default:
       return state;
   }

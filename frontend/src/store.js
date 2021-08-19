@@ -6,7 +6,10 @@ import {
   productDetailsReducer,
   productListReducer,
 } from "./reducers/productReducers";
-import { userSignInReducer } from "./reducers/userReducers";
+import {
+  userRegisterReducer,
+  userSignInReducer,
+} from "./reducers/userReducers";
 
 /* initial state takes products from local storage, if nothing there, shows empty array */
 const initialState = {
@@ -26,6 +29,7 @@ const reducer = combineReducers({
   productDetails: productDetailsReducer,
   cart: cartReducer,
   userSignin: userSignInReducer,
+  userRegister: userRegisterReducer,
 });
 /* shows in Chrome extension */
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

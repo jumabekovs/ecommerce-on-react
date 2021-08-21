@@ -4,9 +4,8 @@ import { savePaymentMethod } from "../actions/cartActions";
 import CheckoutSteps from "../components/CheckoutSteps";
 
 function PaymentMethodScreen(props) {
-  const cart = useSelector((state) => state.cart);
-  const { shippingAddress } = cart;
-  if (!shippingAddress.shippingAddress) {
+  const shippingAddress = useSelector((state) => state.cart.shippingAddress);
+  if (!shippingAddress) {
     // checks if user filled address
     props.history.push("/shipping");
   }
@@ -15,7 +14,7 @@ function PaymentMethodScreen(props) {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(savePaymentMethod(paymentMethod));
-    props.history.push("/placeholder");
+    props.history.push("/placeorder");
   };
   return (
     <div>

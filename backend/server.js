@@ -39,6 +39,7 @@ app.get("/", (req, res) => {
 });
 
 // throw an actual error
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });

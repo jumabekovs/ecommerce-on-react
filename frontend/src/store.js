@@ -16,6 +16,7 @@ import {
   userDetailsReducer,
   userRegisterReducer,
   userSignInReducer,
+  userUpdateProfileReducer,
 } from "./reducers/userReducers";
 
 /* initial state takes products from local storage, if nothing there, shows empty array */
@@ -46,6 +47,7 @@ const reducer = combineReducers({
   orderPay: orderPayReducer,
   orderMineList: orderMineListReducer,
   userDetails: userDetailsReducer,
+  userUpdateProfile: userUpdateProfileReducer,
 });
 /* shows in Chrome extension */
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

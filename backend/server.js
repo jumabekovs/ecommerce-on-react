@@ -4,9 +4,12 @@ const dotenv = require("dotenv");
 const productRouter = require("./routers/productRouter.js");
 const userRouter = require("./routers/userRouter.js");
 const orderRouter = require("./routers/orderRouter.js");
+const AdminBroRouter = require("./admin/adminBro.js");
 
 dotenv.config();
 const app = express();
+
+app.use("/admin", AdminBroRouter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -5,6 +5,7 @@ const productRouter = require("./routers/productRouter.js");
 const userRouter = require("./routers/userRouter.js");
 const orderRouter = require("./routers/orderRouter.js");
 const AdminBroRouter = require("./admin/adminBro.js");
+const filteredProductRouter = require("./routers/filteredProducts.js");
 
 dotenv.config();
 const app = express();
@@ -35,6 +36,7 @@ app.get("/api/products", (req, res) => {
 });   we used it before mongoDB  */
 
 app.use("/api/users", userRouter);
+app.use("/api/category", filteredProductRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
 app.get("/api/config/paypal", (req, res) => {

@@ -1,4 +1,7 @@
 import {
+  PRODUCTS_BY_CATEGORY_FAIL,
+  PRODUCTS_BY_CATEGORY_REQUEST,
+  PRODUCTS_BY_CATEGORY_SUCCESS,
   PRODUCT_DETAILS_FAIL,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
@@ -8,34 +11,59 @@ import {
 } from "../constants/productConstants";
 
 /* state takes empty array */
+const productListInitialState = {
+  loading: true,
+  products: [],
+  filteredProducts: [],
+  error: null,
+  categories: [],
+};
 
-export const productListReducer = (
-  state = { loading: true, products: [] },
-  action
-) => {
+export const productListReducer = (state = productListInitialState, action) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
     case PRODUCT_LIST_SUCCESS:
-      return { loading: false, products: action.payload };
+      return {
+        ...state,
+        loading: false,
+        products: action.payload,
+        categories: action.categories,
+      };
     case PRODUCT_LIST_FAIL:
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
+    case PRODUCTS_BY_CATEGORY_REQUEST:
+      return { ...state, loading: true };
+    case PRODUCTS_BY_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        filteredProducts: action.payload,
+      };
+    case PRODUCTS_BY_CATEGORY_FAIL:
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
 };
 
+const productDetailInitialState = {
+  product: {},
+  loading: true,
+  error: null,
+};
+
 export const productDetailsReducer = (
-  state = { product: {}, loading: true },
+  state = productDetailInitialState,
   action
 ) => {
   switch (action.type) {
     case PRODUCT_DETAILS_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
     case PRODUCT_DETAILS_SUCCESS:
-      return { loading: false, product: action.payload };
+      return { ...state, loading: false, product: action.payload };
     case PRODUCT_DETAILS_FAIL:
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

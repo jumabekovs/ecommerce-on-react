@@ -4,6 +4,7 @@ import { Link, Route, useHistory } from "react-router-dom";
 import { signout } from "./actions/userActions";
 import PrivateRoute from "./components/PrivateRoute";
 import CartScreen from "./screens/CartScreen";
+import FilteredProductScreen from "./screens/FilteredProductScreen";
 import HomeScreen from "./screens/HomeScreen";
 import OrderHistoryScreen from "./screens/OrderHistoryScreen";
 import OrderScreen from "./screens/OrderScreen";
@@ -16,22 +17,33 @@ import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import SigninScreen from "./screens/SigninScreen";
 
 function App() {
+  const categories = useSelector((state) => state.productList.categories);
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
   const history = useHistory();
   const dispatch = useDispatch();
+
   const signoutHandler = (e) => {
     e.preventDefault();
     dispatch(signout(history));
   };
+  const openMenu = () => {
+    document.querySelector(".sidebar").classList.add("open");
+  };
+  const closeMenu = () => {
+    document.querySelector(".sidebar").classList.remove("open");
+  };
   return (
     <div className="grid-container">
       <header className="row">
+        <div className="brand">
+          <button onClick={openMenu}>&#9776;</button>
+        </div>
         <div>
           <Link className="brand" to="/">
-            Boomerang
+            Collibris
           </Link>
         </div>
         <div>
@@ -65,7 +77,24 @@ function App() {
           )}
         </div>
       </header>
+      <aside className="sidebar">
+        <h3>Shopping Categories</h3>
+        <button className="sidebar-close-button" onClick={closeMenu}>
+          х
+        </button>
+        <ul>
+          {categories.map((category) => (
+            <li key={category}>
+              <Link to={`/category/${category}`}>{category}</Link>
+            </li>
+          ))}
+        </ul>
+      </aside>
       <main>
+        <Route
+          path="/category/:category"
+          component={FilteredProductScreen}
+        ></Route>
         <Route path="/cart/:id?" component={CartScreen}></Route>
         <Route path="/product/:id" component={ProductScreen}></Route>
         <Route path="/signin" component={SigninScreen}></Route>

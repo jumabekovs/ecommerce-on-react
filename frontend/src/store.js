@@ -1,6 +1,7 @@
 /* creating redux store */
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
+import { listProducts } from "./actions/productActions";
 import { cartReducer } from "./reducers/cartReducers";
 import {
   orderCreateReducer,
@@ -57,5 +58,7 @@ const store = createStore(
   initialState,
   composeEnhancer(applyMiddleware(thunk))
 );
+
+store.dispatch(listProducts());
 
 export default store;

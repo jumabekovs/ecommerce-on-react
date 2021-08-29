@@ -11,6 +11,7 @@ import OrderScreen from "./screens/OrderScreen";
 import PaymentMethodScreen from "./screens/PaymentMethodScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import ProductScreen from "./screens/ProductScreen";
+import ProductsScreen from "./screens/ProductsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
@@ -78,17 +79,19 @@ function App() {
         </div>
       </header>
       <aside className="sidebar">
-        <h3>Shopping Categories</h3>
+        <h3 id="sidebar">Shopping Categories</h3>
         <button className="sidebar-close-button" onClick={closeMenu}>
           х
         </button>
-        <ul>
-          {categories.map((category) => (
-            <li key={category}>
-              <Link to={`/category/${category}`}>{category}</Link>
-            </li>
-          ))}
-        </ul>
+        <div className="sidebar-inner">
+          <ul>
+            {categories.map((category) => (
+              <li key={category}>
+                <Link to={`/category/${category}`}>{category}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </aside>
       <main>
         <Route
@@ -97,6 +100,7 @@ function App() {
         ></Route>
         <Route path="/cart/:id?" component={CartScreen}></Route>
         <Route path="/product/:id" component={ProductScreen}></Route>
+        <Route path="/products" component={ProductsScreen}></Route>
         <Route path="/signin" component={SigninScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
         <Route path="/shipping" component={ShippingAddressScreen}></Route>

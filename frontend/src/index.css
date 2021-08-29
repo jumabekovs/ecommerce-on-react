@@ -56,6 +56,10 @@ h2 {
   padding: 1rem 0;
 }
 
+#sidebar {
+  margin: 4rem 4rem;
+}
+
 a {
   text-decoration: none;
 }
@@ -358,4 +362,10 @@ img.large {
   position: absolute;
   right: 0.5rem;
   top: 1.5rem;
+}
+
+.sidebar-inner {
+  display: flex;
+  align-items: center;
+  margin: 3rem 10rem;
 }

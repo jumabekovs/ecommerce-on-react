@@ -9,6 +9,9 @@ import {
   PRODUCT_LIST_FAIL,
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
+  PRODUCT_SAVE_FAIL,
+  PRODUCT_SAVE_REQUEST,
+  PRODUCT_SAVE_SUCCESS,
 } from "../constants/productConstants";
 
 export const listProducts = () => async (dispatch) => {
@@ -21,7 +24,7 @@ export const listProducts = () => async (dispatch) => {
     const categoriesSet = new Set();
 
     data.map((product) => {
-      categoriesSet.add(product.category);
+      return categoriesSet.add(product.category);
     });
 
     const categories = Array.from(categoriesSet);
@@ -29,6 +32,32 @@ export const listProducts = () => async (dispatch) => {
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data, categories }); // to get an array add .products
   } catch (error) {
     dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
+  }
+};
+
+export const saveProduct = (product) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: PRODUCT_SAVE_REQUEST, payload: product });
+    const {
+      userSignin: { userInfo },
+    } = getState();
+    if (!product._id) {
+      const { data } = await Axios.post("/api/products", product, {
+        headers: { Authorization: "Bearer " + userInfo.token },
+      });
+      dispatch({ type: PRODUCT_SAVE_SUCCESS, payload: data });
+    } else {
+      const { data } = await Axios.put(
+        `/api/products/${product._id}`,
+        product,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      dispatch({ type: PRODUCT_SAVE_SUCCESS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: PRODUCT_SAVE_FAIL, payload: error.message });
   }
 };
 

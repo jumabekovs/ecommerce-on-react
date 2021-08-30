@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 import MessageBox from "../components/MessageBox";
+import { MEDIA_URL } from "../constants/apiConstants";
 
 function CartScreen(props) {
   const productId = props.match.params.id; // getting id
@@ -42,7 +43,7 @@ function CartScreen(props) {
                 <div className="row">
                   <div>
                     <img
-                      src={item.image}
+                      src={MEDIA_URL + item.image}
                       alt={item.name}
                       className="small"
                     ></img>

@@ -5,6 +5,7 @@ import { detailsProduct } from "../actions/productActions";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Rating from "../components/Rating";
+import { MEDIA_URL } from "../constants/apiConstants";
 
 export default function ProductScreen(props) {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default function ProductScreen(props) {
             <div className="col-2">
               <img
                 className="large"
-                src={product.image}
+                src={MEDIA_URL + product.image}
                 alt={product.name}
               ></img>
             </div>

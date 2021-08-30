@@ -17,6 +17,9 @@ import RegisterScreen from "./screens/RegisterScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import SigninScreen from "./screens/SigninScreen";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const categories = useSelector((state) => state.productList.categories);
   const cart = useSelector((state) => state.cart);
@@ -44,7 +47,7 @@ function App() {
         </div>
         <div>
           <Link className="brand" to="/">
-            Collibris
+            AMAZING
           </Link>
         </div>
         <div>
@@ -112,6 +115,13 @@ function App() {
         <Route path="/" component={HomeScreen} exact></Route>
       </main>
       <footer className="row center">All Rights Reserved</footer>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }

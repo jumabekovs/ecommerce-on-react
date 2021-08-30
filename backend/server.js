@@ -6,10 +6,12 @@ const userRouter = require("./routers/userRouter.js");
 const orderRouter = require("./routers/orderRouter.js");
 const AdminBroRouter = require("./admin/adminBro.js");
 const filteredProductRouter = require("./routers/filteredProducts.js");
+const cors = require("cors");
 
 dotenv.config();
 const app = express();
 
+app.use(cors());
 app.use("/admin", AdminBroRouter);
 
 app.use(express.json());
@@ -22,19 +24,7 @@ mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/amazona", {
   useCreateIndex: true,
 });
 
-/*app.get("/api/products/:id", (req, res) => {
-  const product = data.products.find((x) => x._id === req.params.id);
-  if (product) {
-    res.send(product);
-  } else {
-    res.status(404).send({ message: "Product not Found" });
-  }
-});
-
-app.get("/api/products", (req, res) => {
-  res.send(data);
-});   we used it before mongoDB  */
-
+app.use("/static", express.static(__dirname + "/static"));
 app.use("/api/users", userRouter);
 app.use("/api/category", filteredProductRouter);
 app.use("/api/products", productRouter);

@@ -2,6 +2,9 @@ import {
   PRODUCTS_BY_CATEGORY_FAIL,
   PRODUCTS_BY_CATEGORY_REQUEST,
   PRODUCTS_BY_CATEGORY_SUCCESS,
+  PRODUCT_DELETE_FAIL,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
   PRODUCT_DETAILS_FAIL,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
@@ -45,6 +48,15 @@ export const productListReducer = (state = productListInitialState, action) => {
       };
     case PRODUCTS_BY_CATEGORY_FAIL:
       return { ...state, loading: false, error: action.payload };
+    case PRODUCT_DELETE_SUCCESS: {
+      const products = state.products.filter((product) => {
+        return product._id !== action.payload;
+      });
+      return {
+        ...state,
+        products,
+      };
+    }
     default:
       return state;
   }
@@ -90,6 +102,31 @@ export const productSaveReducer = (state = productSaveInitialState, action) => {
         product: action.payload,
       };
     case PRODUCT_SAVE_FAIL:
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+const productDeleteInitialState = {
+  product: {},
+};
+
+export const productDeleteReducer = (
+  state = productDeleteInitialState,
+  action
+) => {
+  switch (action.type) {
+    case PRODUCT_DELETE_REQUEST:
+      return { ...state, loading: true };
+    case PRODUCT_DELETE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        product: action.payload,
+      };
+    case PRODUCT_DELETE_FAIL:
       return { ...state, loading: false, error: action.payload };
     default:
       return state;

@@ -2,8 +2,11 @@ const express = require("express");
 const expressAsyncHandler = require("express-async-handler");
 const data = require("../data.js");
 const Product = require("../models/productModel.js");
-
+const fileUpload = require("express-fileupload");
+const path = require("path");
 const productRouter = express.Router();
+const shortid = require("shortid");
+const fs = require("fs");
 
 /* api for listing of all products */
 productRouter.get(
@@ -16,11 +19,40 @@ productRouter.get(
 
 productRouter.post(
   "/",
+  fileUpload(),
   expressAsyncHandler(async (req, res) => {
+    let productImage;
+    let uploadPath;
+    let fileName;
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded.");
+    }
+
+    // The name of the input field (i.e. "productImage") is used to retrieve the uploaded file
+    productImage = req.files.image;
+    fileName = `${shortid.generate()}-${productImage.name}`;
+    uploadPath = path.join(__dirname, "..", "/static/images/", fileName);
+    try {
+      await new Promise((resolve, reject) => {
+        // Use the mv() method to place the file somewhere on your server
+        productImage.mv(uploadPath, function (err) {
+          console.log(uploadPath, err);
+          if (err) return reject(err);
+          // console.log("File uploaded!! ", uploadPath);
+          resolve();
+        });
+      });
+    } catch (e) {
+      return res.status(400).json({
+        message: "Wrong file!",
+      });
+    }
+
     const product = new Product({
       name: req.body.name,
       price: req.body.price,
-      image: req.body.image,
+      image: fileName,
       brand: req.body.brand,
       category: req.body.category,
       countInStock: req.body.countInStock,
@@ -62,27 +94,85 @@ productRouter.get(
 
 productRouter.put(
   "/:id",
+  fileUpload(),
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
-    const product = await Product.findById({ productId });
-    if (product) {
-      product.name = req.body.name;
-      product.price = req.body.price;
-      product.image = req.body.image;
-      product.brand = req.body.brand;
-      product.category = req.body.category;
-      product.countInStock = req.body.countInStock;
-      product.description = req.body.description;
-      product.rating = req.body.rating;
-      product.numReviews = req.body.numReviews;
-      const updatedProduct = await product.save();
-      if (updatedProduct) {
-        return res
-          .status(200)
-          .send({ message: "Product Updated", data: updatedProduct });
+    let productImage;
+    let uploadPath;
+    let fileName;
+
+    // The name of the input field (i.e. "productImage") is used to retrieve the uploaded file
+    productImage = (req.files && req.files.image) || null;
+    fileName = productImage && `${shortid.generate()}-${productImage.name}`;
+    uploadPath =
+      productImage && path.join(__dirname, "..", "/static/images/", fileName);
+
+    try {
+      const product = await Product.findById(productId);
+      if (product) {
+        // console.log(product, req.body);
+        if (productImage) {
+          try {
+            const oldImage = path.join(
+              __dirname,
+              "..",
+              "/static/images/",
+              product.image
+            );
+
+            if (fs.existsSync(oldImage)) {
+              fs.unlinkSync(oldImage);
+            }
+            await new Promise((resolve, reject) => {
+              // Use the mv() method to place the file somewhere on your server
+              // console.log("Uploading file...", uploadPath);
+              productImage.mv(uploadPath, function (err) {
+                // console.log(uploadPath, err);
+                if (err) return reject(err);
+                // console.log("File uploaded!! ", uploadPath);
+                resolve();
+              });
+            });
+          } catch (e) {
+            return res.status(400).json({
+              message: "Wrong file!",
+            });
+          }
+        }
+        product.name = req.body.name;
+        product.price = req.body.price;
+        product.image = productImage ? fileName : product.image;
+        product.brand = req.body.brand;
+        product.category = req.body.category;
+        product.countInStock = req.body.countInStock;
+        const updatedProduct = await product.save();
+        if (updatedProduct) {
+          return res
+            .status(200)
+            .send({ message: "Product Updated", data: updatedProduct });
+        }
+        return res.status(500).send({ message: "Error In Updating Product" });
       }
+    } catch (e) {
+      return res.json({ message: e });
     }
-    return res.status(500).send({ message: "Error In Updating Product" });
+  })
+);
+
+productRouter.delete(
+  "/:id",
+  expressAsyncHandler(async (req, res) => {
+    const deletedProduct = await Product.findById(req.params.id);
+    try {
+      if (deletedProduct) {
+        await deletedProduct.remove();
+        res.send({ message: "Product Deleted" });
+      } else {
+        res.send("Error in Deletion");
+      }
+    } catch (e) {
+      return res.json({ message: e });
+    }
   })
 );
 

@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { listProducts, saveProduct } from "../actions/productActions";
+import {
+  deleteProduct,
+  listProducts,
+  saveProduct,
+} from "../actions/productActions";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import { MEDIA_URL } from "../constants/apiConstants";
 
 function ProductsScreen(props) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -11,6 +16,7 @@ function ProductsScreen(props) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [file, setFile] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState("");
@@ -23,6 +29,9 @@ function ProductsScreen(props) {
     success: successSave,
     error: errorSave,
   } = productSave;
+
+  const productDelete = useSelector((state) => state.productDelete);
+  const { success: successDelete, error: errorDelete } = productDelete;
 
   const dispatch = useDispatch();
 
@@ -39,15 +48,18 @@ function ProductsScreen(props) {
   const submitHandler = (e) => {
     e.preventDefault(); // it wont refresh the page
     dispatch(
-      saveProduct({
-        _id: id,
-        name,
-        price,
-        image,
-        brand,
-        category,
-        countInStock,
-      })
+      saveProduct(
+        {
+          _id: id,
+          name,
+          price,
+          image,
+          brand,
+          category,
+          countInStock,
+        },
+        file
+      )
     );
   };
   useEffect(() => {
@@ -56,7 +68,16 @@ function ProductsScreen(props) {
     }
     dispatch(listProducts());
     return () => {};
-  }, [successSave]);
+  }, [successSave, dispatch]);
+
+  const deleteHandler = (product) => {
+    dispatch(deleteProduct(product._id));
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0] || null;
+    setFile(file);
+  };
 
   return (
     <div>
@@ -95,14 +116,20 @@ function ProductsScreen(props) {
             </div>
             <div>
               <label htmlFor="image">Image</label>
-              <input
+              {/* <input
                 type="text"
                 id="image"
                 value={image}
                 placeholder="Enter image"
                 required
                 onChange={(e) => setImage(e.target.value)}
-              ></input>
+              ></input> */}
+              {file ? (
+                <img src={URL.createObjectURL(file)} alt="preview" />
+              ) : image ? (
+                <img src={MEDIA_URL + image} alt="product" />
+              ) : null}
+              <input type="file" onChange={handleFileUpload} />
             </div>
             <div>
               <label htmlFor="brand">Brand</label>
@@ -167,7 +194,7 @@ function ProductsScreen(props) {
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr>
+                <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
                   <td>{product.price}</td>
@@ -175,7 +202,9 @@ function ProductsScreen(props) {
                   <td>{product.brand}</td>
                   <td>
                     <button onClick={() => openModal(product)}>Edit</button>
-                    <button>Delete</button>
+                    <button onClick={() => deleteHandler(product)}>
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

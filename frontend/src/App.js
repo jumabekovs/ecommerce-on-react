@@ -19,6 +19,7 @@ import SigninScreen from "./screens/SigninScreen";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import $api from "./services/api";
 
 function App() {
   const categories = useSelector((state) => state.productList.categories);
@@ -39,6 +40,7 @@ function App() {
   const closeMenu = () => {
     document.querySelector(".sidebar").classList.remove("open");
   };
+
   return (
     <div className="grid-container">
       <header className="row">
@@ -79,6 +81,18 @@ function App() {
           ) : (
             <Link to="/signin">Sign In</Link>
           )}
+          {userInfo && userInfo.isAdmin && (
+            <div className="dropdown">
+              <Link to="/admin">
+                Admin <i className="fa fa-caret-down"></i>
+              </Link>
+              <ul className="dropdown-content">
+                <li>
+                  <Link to="/products">Products</Link>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </header>
       <aside className="sidebar">
@@ -90,7 +104,9 @@ function App() {
           <ul>
             {categories.map((category) => (
               <li key={category}>
-                <Link to={`/category/${category}`}>{category}</Link>
+                <Link onClick={closeMenu} to={`/category/${category}`}>
+                  {category}
+                </Link>
               </li>
             ))}
           </ul>

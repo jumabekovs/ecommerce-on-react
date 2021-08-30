@@ -6,6 +6,7 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import { ORDER_CREATE_RESET } from "../constants/orderConstants";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/LoadingBox";
+import { MEDIA_URL } from "../constants/apiConstants";
 
 function PlaceOrderScreen(props) {
   const cart = useSelector((state) => state.cart);
@@ -65,7 +66,7 @@ function PlaceOrderScreen(props) {
                       <div className="row">
                         <div>
                           <img
-                            src={item.image}
+                            src={MEDIA_URL + item.image}
                             alt={item.name}
                             className="small"
                           ></img>
@@ -127,7 +128,7 @@ function PlaceOrderScreen(props) {
                   className="primary block"
                   disabled={cart.cartItems.length === 0}
                 >
-                  Placeorder
+                  Place Order
                 </button>
               </li>
               {loading && <LoadingBox></LoadingBox>}

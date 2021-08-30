@@ -6,7 +6,6 @@ import {
   listProducts,
   saveProduct,
 } from "../actions/productActions";
-import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { MEDIA_URL } from "../constants/apiConstants";
 
@@ -22,16 +21,9 @@ function ProductsScreen(props) {
   const [countInStock, setCountInStock] = useState("");
 
   const productList = useSelector((state) => state.productList);
-  const { loading, products, error } = productList;
+  const { products, error } = productList;
   const productSave = useSelector((state) => state.productSave);
-  const {
-    loading: loadingSave,
-    success: successSave,
-    error: errorSave,
-  } = productSave;
-
-  const productDelete = useSelector((state) => state.productDelete);
-  const { success: successDelete, error: errorDelete } = productDelete;
+  const { success: successSave } = productSave;
 
   const dispatch = useDispatch();
 
@@ -84,7 +76,9 @@ function ProductsScreen(props) {
       <div className="content content-margined">
         <div className="product-header">
           <h3>Products</h3>
-          <button onClick={() => openModal({})}>Create Product</button>
+          <button className="button primary" onClick={() => openModal({})}>
+            Create Product
+          </button>
         </div>
         {modalVisible && (
           <form className="form" onSubmit={submitHandler}>
@@ -116,14 +110,6 @@ function ProductsScreen(props) {
             </div>
             <div>
               <label htmlFor="image">Image</label>
-              {/* <input
-                type="text"
-                id="image"
-                value={image}
-                placeholder="Enter image"
-                required
-                onChange={(e) => setImage(e.target.value)}
-              ></input> */}
               {file ? (
                 <img src={URL.createObjectURL(file)} alt="preview" />
               ) : image ? (
@@ -174,14 +160,15 @@ function ProductsScreen(props) {
                 onClick={() => setModalVisible(false)}
                 type="button"
               >
-                Go Back
+                <i className="fa fa-caret-left" aria-hidden="true"></i>
+                <i className="fa fa-caret-left" aria-hidden="true"></i> Go Back
               </button>
             </div>
           </form>
         )}
 
         <div className="product-list">
-          <table>
+          <table className="table">
             <thead>
               <tr>
                 <th>ID</th>
@@ -201,8 +188,16 @@ function ProductsScreen(props) {
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                    <button onClick={() => openModal(product)}>Edit</button>
-                    <button onClick={() => deleteHandler(product)}>
+                    <button
+                      className="button"
+                      onClick={() => openModal(product)}
+                    >
+                      Edit
+                    </button>{" "}
+                    <button
+                      className="button"
+                      onClick={() => deleteHandler(product)}
+                    >
                       Delete
                     </button>
                   </td>

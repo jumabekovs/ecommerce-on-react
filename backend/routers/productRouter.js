@@ -7,6 +7,7 @@ const path = require("path");
 const productRouter = express.Router();
 const shortid = require("shortid");
 const fs = require("fs");
+const { isAuth, isAdmin } = require("../utils.js");
 
 /* api for listing of all products */
 productRouter.get(
@@ -19,6 +20,8 @@ productRouter.get(
 
 productRouter.post(
   "/",
+  isAdmin,
+  isAuth,
   fileUpload(),
   expressAsyncHandler(async (req, res) => {
     let productImage;
@@ -45,7 +48,7 @@ productRouter.post(
       });
     } catch (e) {
       return res.status(400).json({
-        message: "Wrong file!",
+        message: "Not a file!",
       });
     }
 
@@ -94,6 +97,8 @@ productRouter.get(
 
 productRouter.put(
   "/:id",
+  isAdmin,
+  isAuth,
   fileUpload(),
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
@@ -110,7 +115,6 @@ productRouter.put(
     try {
       const product = await Product.findById(productId);
       if (product) {
-        // console.log(product, req.body);
         if (productImage) {
           try {
             const oldImage = path.join(
@@ -125,17 +129,14 @@ productRouter.put(
             }
             await new Promise((resolve, reject) => {
               // Use the mv() method to place the file somewhere on your server
-              // console.log("Uploading file...", uploadPath);
               productImage.mv(uploadPath, function (err) {
-                // console.log(uploadPath, err);
                 if (err) return reject(err);
-                // console.log("File uploaded!! ", uploadPath);
                 resolve();
               });
             });
           } catch (e) {
             return res.status(400).json({
-              message: "Wrong file!",
+              message: "Not a file!",
             });
           }
         }
@@ -161,6 +162,8 @@ productRouter.put(
 
 productRouter.delete(
   "/:id",
+  isAdmin,
+  isAuth,
   expressAsyncHandler(async (req, res) => {
     const deletedProduct = await Product.findById(req.params.id);
     try {

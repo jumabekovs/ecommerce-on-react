@@ -14,6 +14,7 @@ import {
   ORDER_PAY_SUCCESS,
 } from "../constants/orderConstants";
 import $api from "../services/api";
+import { toast } from "react-toastify";
 
 export const createOrder = (order) => async (dispatch, getState) => {
   dispatch({ type: ORDER_CREATE_REQUEST, payload: order });
@@ -21,11 +22,19 @@ export const createOrder = (order) => async (dispatch, getState) => {
     const {
       userSignin: { userInfo },
     } = getState();
-    const { data } = await $api.post("/api/orders", order, {
+    const promise = $api.post("/api/orders", order, {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
     });
+
+    toast.promise(promise, {
+      pending: "Creating order...",
+      success: "Successfully Ordered 👌",
+      error: "Error while Ordering 🤯",
+    });
+
+    const { data } = await promise;
     dispatch({ type: ORDER_CREATE_SUCCESS, payload: data.order });
     dispatch({ type: CART_EMPTY });
     localStorage.removeItem("cartItems");
@@ -46,9 +55,17 @@ export const detailsOrder = (orderId) => async (dispatch, getState) => {
     userSignin: { userInfo },
   } = getState();
   try {
-    const { data } = await $api.get(`/api/orders/${orderId}`, {
+    const promise = $api.get(`/api/orders/${orderId}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
+
+    toast.promise(promise, {
+      pending: "In progress...",
+      success: "Success 👌",
+      error: "Error 🤯",
+    });
+    const { data } = await promise;
+
     dispatch({ type: ORDER_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     const message =
@@ -66,13 +83,18 @@ export const payOrder =
       userSignin: { userInfo },
     } = getState();
     try {
-      const { data } = await $api.put(
-        `/api/orders/${order._id}/pay`,
-        paymentResult,
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
+      const promise = $api.put(`/api/orders/${order._id}/pay`, paymentResult, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+
+      toast.promise(promise, {
+        pending: "Creating Payment...",
+        success: "Successfully Paid 👌",
+        error: "Error in Payment 🤯",
+      });
+
+      const { data } = await promise;
+
       dispatch({ type: ORDER_PAY_SUCCESS, payload: data });
     } catch (error) {
       const message =
@@ -89,11 +111,19 @@ export const listOrderMine = () => async (dispatch, getState) => {
     userSignin: { userInfo },
   } = getState();
   try {
-    const { data } = await $api.get("/api/orders/mine", {
+    const promise = $api.get("/api/orders/mine", {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
     });
+
+    toast.promise(promise, {
+      pending: "Proccess...",
+      success: "Success 👌",
+      error: "Error in Processing 🤯",
+    });
+
+    const { data } = await promise;
     dispatch({ type: ORDER_MINE_LIST_SUCCESS, payload: data });
   } catch (error) {
     const message =

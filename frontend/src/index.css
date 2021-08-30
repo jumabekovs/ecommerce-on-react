@@ -369,3 +369,19 @@ img.large {
   align-items: center;
   margin: 3rem 10rem;
 }
+
+/* Products */
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.content-margined {
+  margin: 1rem;
+}
+
+.table {
+  width: 100%;
+}

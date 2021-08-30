@@ -23,8 +23,15 @@ export const listProducts = () => async (dispatch) => {
     type: PRODUCT_LIST_REQUEST,
   });
   try {
-    const { data } = await $api.get("/api/products");
+    const promise = $api.get("/api/products");
 
+    toast.promise(promise, {
+      pending: "Getting proccess...",
+      success: "Success 👌",
+      error: "Error 🤯",
+    });
+
+    const { data } = await promise;
     const categoriesSet = new Set();
 
     data.map((product) => {

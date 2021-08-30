@@ -7,6 +7,7 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { ORDER_PAY_RESET } from "../constants/orderConstants";
 import $api from "../services/api";
+import { MEDIA_URL } from "../constants/apiConstants";
 
 function OrderScreen(props) {
   const orderId = props.match.params.id;
@@ -104,7 +105,7 @@ function OrderScreen(props) {
                       <div className="row">
                         <div>
                           <img
-                            src={item.image}
+                            src={MEDIA_URL + item.image}
                             alt={item.name}
                             className="small"
                           ></img>

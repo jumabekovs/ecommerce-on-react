@@ -5,9 +5,19 @@ import {
   CART_SAVE_SHIPPING_ADDRESS,
 } from "../constants/cartConstants";
 import $api from "../services/api";
+import { toast } from "react-toastify";
 
 export const addToCart = (productId, qty) => async (dispatch, getState) => {
-  const { data } = await $api.get(`/api/products/${productId}`);
+  const promise = $api.get(`/api/products/${productId}`);
+
+  toast.promise(promise, {
+    pending: "Adding to Cart...",
+    success: "Successfully Added 👌",
+    error: "Error while Adding 🤯",
+  });
+
+  const { data } = await promise;
+
   dispatch({
     type: CART_ADD_ITEM,
     payload: {

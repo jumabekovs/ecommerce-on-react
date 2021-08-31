@@ -13,8 +13,23 @@ const { isAuth, isAdmin } = require("../utils.js");
 productRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const products = await Product.find({});
+    const search = req.query.search || "";
+
+    const products = await Product.find({
+      $or: [
+        search ? { name: { $regex: search, $options: "i" } } : {},
+        search ? { category: { $regex: search, $options: "i" } } : {},
+      ],
+    });
     res.send(products);
+  })
+);
+
+productRouter.get(
+  "/categories",
+  expressAsyncHandler(async (req, res) => {
+    const categories = await Product.find().distinct("category");
+    res.send(categories);
   })
 );
 

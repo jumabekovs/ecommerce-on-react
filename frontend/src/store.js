@@ -10,6 +10,7 @@ import {
   orderPayReducer,
 } from "./reducers/orderReducers";
 import {
+  productCategoryListReducer,
   productDeleteReducer,
   productDetailsReducer,
   productListReducer,
@@ -53,6 +54,7 @@ const reducer = combineReducers({
   orderMineList: orderMineListReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
+  productCategoryList: productCategoryListReducer,
 });
 /* shows in Chrome extension */
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

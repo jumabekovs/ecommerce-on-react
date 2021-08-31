@@ -16,10 +16,11 @@ import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import SigninScreen from "./screens/SigninScreen";
+import SearchBox from "./components/SearchBox";
+import SearchScreen from "./screens/SearchScreen";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import $api from "./services/api";
 
 function App() {
   const categories = useSelector((state) => state.productList.categories);
@@ -53,6 +54,11 @@ function App() {
           </Link>
         </div>
         <div>
+          <Route
+            render={({ history }) => <SearchBox history={history}></SearchBox>}
+          ></Route>
+        </div>
+        <div>
           <Link to="/cart">
             Cart
             {cartItems.length > 0 && (
@@ -83,9 +89,9 @@ function App() {
           )}
           {userInfo && userInfo.isAdmin && (
             <div className="dropdown">
-              <Link to="/admin">
+              <a href="http://localhost:5000/admin">
                 Admin <i className="fa fa-caret-down"></i>
-              </Link>
+              </a>
               <ul className="dropdown-content">
                 <li>
                   <Link to="/products">Products</Link>
@@ -127,6 +133,7 @@ function App() {
         <Route path="/placeorder" component={PlaceOrderScreen}></Route>
         <Route path="/order/:id" component={OrderScreen}></Route>
         <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
+        <Route path="/search/:name?" component={SearchScreen} exact></Route>
         <PrivateRoute path="/profile" component={ProfileScreen}></PrivateRoute>
         <Route path="/" component={HomeScreen} exact></Route>
       </main>

@@ -14,6 +14,9 @@ import {
   PRODUCT_SAVE_FAIL,
   PRODUCT_SAVE_REQUEST,
   PRODUCT_SAVE_SUCCESS,
+  PRODUCT_CATEGORY_LIST_REQUEST,
+  PRODUCT_CATEGORY_LIST_SUCCESS,
+  PRODUCT_CATEGORY_LIST_FAIL,
 } from "../constants/productConstants";
 
 /* state takes empty array */
@@ -57,6 +60,27 @@ export const productListReducer = (state = productListInitialState, action) => {
         products,
       };
     }
+    default:
+      return state;
+  }
+};
+
+const productCategoryListInitialState = {
+  loading: true,
+  categories: [],
+};
+
+export const productCategoryListReducer = (
+  state = productCategoryListInitialState,
+  action
+) => {
+  switch (action.type) {
+    case PRODUCT_CATEGORY_LIST_REQUEST:
+      return { ...state, loading: true };
+    case PRODUCT_CATEGORY_LIST_SUCCESS:
+      return { ...state, loading: false, categories: action.payload };
+    case PRODUCT_CATEGORY_LIST_FAIL:
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

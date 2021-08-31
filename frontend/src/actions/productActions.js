@@ -14,35 +14,52 @@ import {
   PRODUCT_SAVE_FAIL,
   PRODUCT_SAVE_REQUEST,
   PRODUCT_SAVE_SUCCESS,
+  PRODUCT_CATEGORY_LIST_SUCCESS,
+  PRODUCT_CATEGORY_LIST_REQUEST,
+  PRODUCT_CATEGORY_LIST_FAIL,
 } from "../constants/productConstants";
 import $api from "../services/api";
 import { toast } from "react-toastify";
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts =
+  (search = "") =>
+  async (dispatch) => {
+    dispatch({
+      type: PRODUCT_LIST_REQUEST,
+    });
+    try {
+      const promise = $api.get(`/api/products?search=${search}`);
+
+      toast.promise(promise, {
+        pending: "Proccessing...",
+        success: "Success 👌",
+        error: "Error 🤯",
+      });
+
+      const { data } = await promise;
+      const categoriesSet = new Set();
+
+      data.map((product) => {
+        return categoriesSet.add(product.category);
+      });
+
+      const categories = Array.from(categoriesSet);
+
+      dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data, categories }); // to get an array add .products
+    } catch (error) {
+      dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
+    }
+  };
+
+export const listProductCategories = () => async (dispatch) => {
   dispatch({
-    type: PRODUCT_LIST_REQUEST,
+    type: PRODUCT_CATEGORY_LIST_REQUEST,
   });
   try {
-    const promise = $api.get("/api/products");
-
-    toast.promise(promise, {
-      pending: "Getting proccess...",
-      success: "Success 👌",
-      error: "Error 🤯",
-    });
-
-    const { data } = await promise;
-    const categoriesSet = new Set();
-
-    data.map((product) => {
-      return categoriesSet.add(product.category);
-    });
-
-    const categories = Array.from(categoriesSet);
-
-    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data, categories }); // to get an array add .products
+    const { data } = await $api.get(`/api/products/categories`);
+    dispatch({ type: PRODUCT_CATEGORY_LIST_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
+    dispatch({ type: PRODUCT_CATEGORY_LIST_FAIL, payload: error.message });
   }
 };
 

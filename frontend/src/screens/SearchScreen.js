@@ -33,8 +33,14 @@ export default function SearchScreen() {
       </div>
       <div className="row top">
         <div className="col-1">
-          <h3>Category:</h3>
-          <ul>{products.map((product) => product.category)}</ul>
+          <h3>Brand:</h3>
+          <ul>
+            {products.map((product) => (
+              <li>
+                <b>{product.brand}</b>
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="col-3">
           {loading ? (
@@ -44,7 +50,7 @@ export default function SearchScreen() {
           ) : (
             <>
               {products.length === 0 && (
-                <MessageBox>No Product Found</MessageBox>
+                <MessageBox>No Products Found</MessageBox>
               )}
               <div className="row center">
                 {products.map((product) => (

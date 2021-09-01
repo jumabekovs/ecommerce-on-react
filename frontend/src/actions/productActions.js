@@ -30,12 +30,6 @@ export const listProducts =
     try {
       const promise = $api.get(`/api/products?search=${search}`);
 
-      toast.promise(promise, {
-        pending: "Proccessing...",
-        success: "Success 👌",
-        error: "Error 🤯",
-      });
-
       const { data } = await promise;
       const categoriesSet = new Set();
 

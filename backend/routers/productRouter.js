@@ -7,7 +7,7 @@ const path = require("path");
 const productRouter = express.Router();
 const shortid = require("shortid");
 const fs = require("fs");
-const { isAuth, isAdmin } = require("../utils.js");
+const { isAuth } = require("../utils.js");
 
 /* api for listing of all products */
 productRouter.get(
@@ -25,17 +25,8 @@ productRouter.get(
   })
 );
 
-productRouter.get(
-  "/categories",
-  expressAsyncHandler(async (req, res) => {
-    const categories = await Product.find().distinct("category");
-    res.send(categories);
-  })
-);
-
 productRouter.post(
   "/",
-  isAdmin,
   isAuth,
   fileUpload(),
   expressAsyncHandler(async (req, res) => {
@@ -112,7 +103,6 @@ productRouter.get(
 
 productRouter.put(
   "/:id",
-  isAdmin,
   isAuth,
   fileUpload(),
   expressAsyncHandler(async (req, res) => {
@@ -177,7 +167,6 @@ productRouter.put(
 
 productRouter.delete(
   "/:id",
-  isAdmin,
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const deletedProduct = await Product.findById(req.params.id);

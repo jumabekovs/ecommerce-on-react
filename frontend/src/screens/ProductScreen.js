@@ -34,11 +34,13 @@ export default function ProductScreen(props) {
           </Link>
           <div className="row top">
             <div className="col-2">
-              <img
-                className="large"
-                src={MEDIA_URL + product.image}
-                alt={product.name}
-              ></img>
+              <div className="image-fit">
+                <img
+                  className="large"
+                  src={MEDIA_URL + product.image}
+                  alt={product.name}
+                ></img>
+              </div>
             </div>
             <div className="col-1">
               <ul>

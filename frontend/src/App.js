@@ -21,6 +21,7 @@ import SearchScreen from "./screens/SearchScreen";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SearchBoxInline from "./components/SearchBoxInline";
 
 function App() {
   const categories = useSelector((state) => state.productList.categories);
@@ -46,11 +47,14 @@ function App() {
     <div className="grid-container">
       <header className="row">
         <div className="brand">
-          <button onClick={openMenu}>&#9776;</button>
-        </div>
-        <div>
+          <button className="open-sidebar" onClick={openMenu}>
+            <i className="fa fa-bars"></i>
+          </button>
           <Link className="brand" to="/">
-            AMAZING
+            Paul & Shark
+          </Link>
+          <Link className="brand_small" to="/">
+            P & S
           </Link>
         </div>
         <div>
@@ -102,9 +106,16 @@ function App() {
         </div>
       </header>
       <aside className="sidebar">
+        <div className="sidebar_search">
+          <Route
+            render={({ history }) => (
+              <SearchBoxInline history={history}></SearchBoxInline>
+            )}
+          ></Route>
+        </div>
         <h3 id="sidebar">Shopping Categories</h3>
         <button className="sidebar-close-button" onClick={closeMenu}>
-          х
+          <i className="fa fa-close"></i>
         </button>
         <div className="sidebar-inner">
           <ul>

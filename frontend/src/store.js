@@ -1,8 +1,8 @@
 /* creating redux store */
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import { listProducts } from "./actions/productActions";
 import { cartReducer } from "./reducers/cartReducers";
+import categoriesReducer from "./reducers/categoriesReducer";
 import {
   orderCreateReducer,
   orderDetailsReducer,
@@ -10,7 +10,6 @@ import {
   orderPayReducer,
 } from "./reducers/orderReducers";
 import {
-  productCategoryListReducer,
   productDeleteReducer,
   productDetailsReducer,
   productListReducer,
@@ -54,7 +53,7 @@ const reducer = combineReducers({
   orderMineList: orderMineListReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
-  productCategoryList: productCategoryListReducer,
+  categoriesState: categoriesReducer,
 });
 /* shows in Chrome extension */
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -64,7 +63,5 @@ const store = createStore(
   initialState,
   composeEnhancer(applyMiddleware(thunk))
 );
-
-store.dispatch(listProducts());
 
 export default store;

@@ -14,12 +14,16 @@ productRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     const search = req.query.search || "";
+    const category = req.query.category;
+    const brand = req.query.brand;
 
     const products = await Product.find({
       $or: [
         search ? { name: { $regex: search, $options: "i" } } : {},
         search ? { category: { $regex: search, $options: "i" } } : {},
       ],
+      ...(category ? { category } : {}),
+      ...(brand ? { brand } : {}),
     });
     res.send(products);
   })

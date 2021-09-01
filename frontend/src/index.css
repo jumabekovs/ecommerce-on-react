@@ -393,6 +393,7 @@ img.large {
   width: 30rem;
   background-color: #f0f0f0;
   height: 100%;
+  overflow-y: auto;
 }
 
 .sidebar.open {
@@ -415,8 +416,7 @@ img.large {
 
 .sidebar-inner {
   display: flex;
-  align-items: center;
-  margin: 3rem 10rem;
+  flex-direction: column;
 }
 
 /* Products */

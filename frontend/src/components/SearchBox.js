@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
-export default function SearchBox(props) {
+function SearchBox() {
+  const history = useHistory();
   const [name, setName] = useState("");
   const closeMenu = () => {
     document.querySelector(".sidebar").classList.remove("open");
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    props.history.push(`/search/${name}`);
+    history.push(`/?search=${encodeURIComponent(name)}`);
   };
   return (
     <form className="search" onSubmit={submitHandler}>
@@ -25,3 +27,5 @@ export default function SearchBox(props) {
     </form>
   );
 }
+
+export default React.memo(SearchBox);

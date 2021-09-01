@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
-export default function SearchBoxInline(props) {
+function SearchBoxInline() {
+  const history = useHistory();
+
   const [name, setName] = useState("");
+
   const closeMenu = () => {
     document.querySelector(".sidebar").classList.remove("open");
   };
+
   const submitHandler = (e) => {
     e.preventDefault();
-    props.history.push(`/search/${name}`);
+    history.push(`/?search=${encodeURIComponent(name)}`);
   };
+
   return (
     <form className="search_inline" onSubmit={submitHandler}>
       <div className="row_search">
@@ -25,3 +31,5 @@ export default function SearchBoxInline(props) {
     </form>
   );
 }
+
+export default React.memo(SearchBoxInline);

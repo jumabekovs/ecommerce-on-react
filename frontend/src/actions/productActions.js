@@ -1,7 +1,4 @@
 import {
-  PRODUCTS_BY_CATEGORY_FAIL,
-  PRODUCTS_BY_CATEGORY_REQUEST,
-  PRODUCTS_BY_CATEGORY_SUCCESS,
   PRODUCT_DELETE_FAIL,
   PRODUCT_DELETE_REQUEST,
   PRODUCT_DELETE_SUCCESS,
@@ -14,48 +11,28 @@ import {
   PRODUCT_SAVE_FAIL,
   PRODUCT_SAVE_REQUEST,
   PRODUCT_SAVE_SUCCESS,
-  PRODUCT_CATEGORY_LIST_SUCCESS,
-  PRODUCT_CATEGORY_LIST_REQUEST,
-  PRODUCT_CATEGORY_LIST_FAIL,
 } from "../constants/productConstants";
 import $api from "../services/api";
 import { toast } from "react-toastify";
 
 export const listProducts =
-  (search = "") =>
+  (queries = {}) =>
   async (dispatch) => {
     dispatch({
       type: PRODUCT_LIST_REQUEST,
     });
     try {
-      const promise = $api.get(`/api/products?search=${search}`);
+      const qs = new URLSearchParams(queries);
+      const { data } = await $api.get(`/api/products?${qs.toString()}`);
 
-      const { data } = await promise;
-      const categoriesSet = new Set();
-
-      data.map((product) => {
-        return categoriesSet.add(product.category);
+      dispatch({
+        type: PRODUCT_LIST_SUCCESS,
+        payload: data,
       });
-
-      const categories = Array.from(categoriesSet);
-
-      dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data, categories }); // to get an array add .products
     } catch (error) {
       dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
     }
   };
-
-export const listProductCategories = () => async (dispatch) => {
-  dispatch({
-    type: PRODUCT_CATEGORY_LIST_REQUEST,
-  });
-  try {
-    const { data } = await $api.get(`/api/products/categories`);
-    dispatch({ type: PRODUCT_CATEGORY_LIST_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({ type: PRODUCT_CATEGORY_LIST_FAIL, payload: error.message });
-  }
-};
 
 export const saveProduct =
   (product, image = null) =>
@@ -113,19 +90,6 @@ export const saveProduct =
       dispatch({ type: PRODUCT_SAVE_FAIL, payload: error.message });
     }
   };
-
-export const filteredListProducts = (productCategory) => async (dispatch) => {
-  dispatch({
-    type: PRODUCTS_BY_CATEGORY_REQUEST,
-    payload: productCategory,
-  });
-  try {
-    const { data } = await $api.get(`/api/category/${productCategory}`);
-    dispatch({ type: PRODUCTS_BY_CATEGORY_SUCCESS, payload: data }); // to get an array add .products
-  } catch (error) {
-    dispatch({ type: PRODUCTS_BY_CATEGORY_FAIL, payload: error.message });
-  }
-};
 
 export const detailsProduct = (productId) => async (dispatch) => {
   dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });

@@ -1,26 +1,10 @@
 import React from "react";
-import Product from "../components/Product";
-import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox";
-import { useSelector } from "react-redux";
+import ProductsList from "../components/ProductsList";
 
-export default function HomeScreen(props) {
-  // const dispatch = useDispatch();
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+export default function HomeScreen() {
   return (
     <div>
-      {loading ? (
-        <LoadingBox></LoadingBox>
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
-        <div className="row center">
-          {products.map((product) => (
-            <Product key={product._id} product={product}></Product>
-          ))}
-        </div>
-      )}
+      <ProductsList />
     </div>
   );
 }

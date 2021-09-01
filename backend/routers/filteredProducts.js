@@ -23,4 +23,22 @@ filteredProductRouter.get(
   })
 );
 
+filteredProductRouter.get(
+  "/:brand",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const { brand } = req.params;
+      const products = await Product.find({ brand });
+      if (products) {
+        res.send(products);
+      } else {
+        res.status(404).send({ message: "Products Not Found" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    }
+  })
+);
+
 module.exports = filteredProductRouter;
